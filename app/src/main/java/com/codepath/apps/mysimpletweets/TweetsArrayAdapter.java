@@ -1,10 +1,10 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,34 +14,66 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 // Taking the Tweet objects and turning them into Views displayed in the list
-public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
-    public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
-        super(context, android.R.layout.simple_list_item_1, tweets);
+public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.ViewHolder> {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView ivProfileImage;
+        public TextView tvUserName;
+        public TextView tvBody;
+        public TextView tvRelativeTimestamp;
+
+        public ViewHolder (View itemView) {
+            super(itemView);
+
+            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+            tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
+            tvBody = (TextView) itemView.findViewById(R.id.tvBody);
+            tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvRelativeTimestamp);
+        }
     }
 
-    // Override and setup custom template
-    // ViewHolder pattern
+    private List<Tweet> mTweets;
+    private Context mContext;
+
+    public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
+        mTweets = tweets;
+        mContext = context;
+    }
+
+    private Context getContext() {
+        return mContext;
+    }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // 1. Get the tweet
-        Tweet tweet = getItem(position);
-        // 2. Find or inflate the template
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
-        }
-        // 3. Find the subviews to fill with data in the template
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-        TextView tvRelativeTimestamp = (TextView) convertView.findViewById(R.id.tvRelativeTimestamp);
-        // 4. Populate data into the subviews
+    public TweetsArrayAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        // Inflate the custom layout
+        View contactView = inflater.inflate(R.layout.item_tweet, parent, false);
+
+        // Return a new holder instance
+        ViewHolder viewHolder = new ViewHolder(contactView);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(TweetsArrayAdapter.ViewHolder viewHolder, int position) {
+        Tweet tweet = mTweets.get(position);
+
+        ImageView ivProfileImage = viewHolder.ivProfileImage;
+        TextView tvUserName = viewHolder.tvUserName;
+        TextView tvBody = viewHolder.tvBody;
+        TextView tvRelativeTimestamp = viewHolder.tvRelativeTimestamp;
+
         tvUserName.setText(tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
         tvRelativeTimestamp.setText(tweet.getCreatedAt());
         ivProfileImage.setImageResource(android.R.color.transparent);   // clear out the old image for a recycled view
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
-        // 5. Return the view to be inserted into the list
-        return convertView;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mTweets.size();
     }
 }

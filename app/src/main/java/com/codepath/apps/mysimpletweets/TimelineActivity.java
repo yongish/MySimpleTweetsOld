@@ -2,6 +2,8 @@ package com.codepath.apps.mysimpletweets;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -27,13 +29,21 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         // Find the listview
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
+        //lvTweets = (ListView) findViewById(R.id.lvTweets);
+        tweets = new ArrayList<>();
+        RecyclerView rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
+
+        aTweets = new TweetsArrayAdapter(this, tweets);
+        rvTweets.setAdapter(aTweets);
+        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+
+        /*
         // Create the arraylist (data source)
         tweets = new ArrayList<>();
         // Construct the adapter from data source
         aTweets = new TweetsArrayAdapter(this, tweets);
         // Connect adapter to list view
-        lvTweets.setAdapter(aTweets);
+        lvTweets.setAdapter(aTweets);*/
         // Get the client
         client = TwitterApplication.getRestClient();    // singleton client
         populateTimeline();
@@ -50,7 +60,9 @@ public class TimelineActivity extends AppCompatActivity {
                 // DESERIALIZE JSON
                 // CREATE MODELS AND ADD THEM TO THE ADAPTER
                 // LOAD THE MODEL DATA INTO LISTVIEW
-                aTweets.addAll(Tweet.fromJSONArray(json));
+                //aTweets.addAll(Tweet.fromJSONArray(json));
+                tweets.addAll(Tweet.fromJSONArray(json));
+                aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
             }
 
             @Override
