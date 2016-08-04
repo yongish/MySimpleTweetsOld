@@ -39,7 +39,6 @@ public class TimelineActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
         client = TwitterApplication.getRestClient();    // singleton client
-        lowestUid = Long.MAX_VALUE;
         populateTimeline();
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
