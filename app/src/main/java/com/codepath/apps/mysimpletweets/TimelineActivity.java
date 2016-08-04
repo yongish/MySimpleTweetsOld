@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -24,29 +25,30 @@ public class TimelineActivity extends AppCompatActivity {
     private TweetsArrayAdapter aTweets;
     private ListView lvTweets;
 
+    private long lowestUid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        // Find the listview
-        //lvTweets = (ListView) findViewById(R.id.lvTweets);
         tweets = new ArrayList<>();
         RecyclerView rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
 
         aTweets = new TweetsArrayAdapter(this, tweets);
         rvTweets.setAdapter(aTweets);
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
-
-        /*
-        // Create the arraylist (data source)
-        tweets = new ArrayList<>();
-        // Construct the adapter from data source
-        aTweets = new TweetsArrayAdapter(this, tweets);
-        // Connect adapter to list view
-        lvTweets.setAdapter(aTweets);*/
-        // Get the client
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(linearLayoutManager);
         client = TwitterApplication.getRestClient();    // singleton client
+        lowestUid = Long.MAX_VALUE;
         populateTimeline();
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                populateTimeline();
+            }
+        });
     }
 
     // Send an API request to get the timeline json
@@ -61,13 +63,24 @@ public class TimelineActivity extends AppCompatActivity {
                 // CREATE MODELS AND ADD THEM TO THE ADAPTER
                 // LOAD THE MODEL DATA INTO LISTVIEW
                 //aTweets.addAll(Tweet.fromJSONArray(json));
-                tweets.addAll(Tweet.fromJSONArray(json));
+                ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
+                lowestUid = getLowestUid(newTweets);
+                tweets.addAll(newTweets);
                 aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
             }
-        });
+        }, lowestUid);
+    }
+
+    private long getLowestUid(ArrayList<Tweet> tweets) {
+        long lowestUid = Long.MAX_VALUE;
+        for (Tweet tweet: tweets) {
+            long uid = tweet.getUid();
+            if (uid < lowestUid) lowestUid = uid;
+        }
+        return lowestUid;
     }
 }

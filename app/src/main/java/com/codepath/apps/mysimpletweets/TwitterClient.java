@@ -33,12 +33,12 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	// Gets us the home timeline
-	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+	public void getHomeTimeline(AsyncHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Specify the params
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
-		params.put("since_id", 1);
+		params.put("max_id", maxId);	// TODO: pagination maybe using a combination of count and since_id
 		// Execute the request
 		getClient().get(apiUrl, params, handler);
 	}
