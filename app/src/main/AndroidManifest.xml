@@ -42,7 +42,8 @@
         </activity>
         <activity
             android:name=".TimelineActivity"
-            android:label="Home Timeline"></activity>
+            android:label="Home Timeline" />
+        <activity android:name=".ComposeActivity"></activity>
     </application>
 
 </manifest>

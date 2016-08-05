@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
         tweets = new ArrayList<>();
         RecyclerView rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
 
@@ -50,6 +52,12 @@ public class TimelineActivity extends AppCompatActivity {
                 populateTimeline();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.compose, menu);
+        return true;
     }
 
     // Send an API request to get the timeline json
@@ -85,4 +93,5 @@ public class TimelineActivity extends AppCompatActivity {
         }
         return lowestUid;
     }
+
 }
