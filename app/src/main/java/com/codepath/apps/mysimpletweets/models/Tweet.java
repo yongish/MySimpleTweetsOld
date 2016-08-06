@@ -100,9 +100,10 @@ public class Tweet {
         return relativeDate;
     }
 
-    // Twitter does not provide timezone. Assume Central Time based on observation.
+    // Twitter does not provide timezone. Assume PST based on observation.
     private static long getTimeDifference() {
-        TimeZone twitterTimeZone = TimeZone.getTimeZone("America/Chicago");
+        TimeZone twitterTimeZone = TimeZone.getTimeZone("America/Los_Angeles");
+//        TimeZone twitterTimeZone = TimeZone.getTimeZone("America/Chicago");
         TimeZone systemTimeZone = Calendar.getInstance().getTimeZone();
         return twitterTimeZone.getRawOffset() - systemTimeZone.getRawOffset() + twitterTimeZone.getDSTSavings() - systemTimeZone.getDSTSavings();
     }
