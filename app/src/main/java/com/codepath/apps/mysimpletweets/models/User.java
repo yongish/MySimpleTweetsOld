@@ -2,7 +2,9 @@ package com.codepath.apps.mysimpletweets.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 public class User {
     // list attributes
     private String name;
@@ -25,6 +27,8 @@ public class User {
     public String getProfileImageUrl() {
         return profileImageUrl;
     }
+
+    public User() {}
 
     // deserialize the user json => User
     public static User fromJSON (JSONObject json) {

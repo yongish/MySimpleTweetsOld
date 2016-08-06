@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 // Parse the JSON + Store the data, encapsulate state logic or display logic
+@Parcel
 public class Tweet {
     // list out the attributes
     private String body;
@@ -21,6 +23,13 @@ public class Tweet {
     private User user;  // store embedded user object
     private String createdAt;
 
+    public Tweet() {}
+
+    public Tweet(String body, User user) {
+        this.body = body;
+        this.user = user;
+        this.createdAt = "Just now";
+    }
 
     public String getBody() {
         return body;

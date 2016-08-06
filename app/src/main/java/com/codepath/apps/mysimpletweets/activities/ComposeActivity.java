@@ -1,5 +1,6 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,6 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
+import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -44,16 +48,19 @@ public class ComposeActivity extends AppCompatActivity {
                 Log.d("FAILED GET USER DETAILS", errorResponse.toString());
             }
         });
-
     }
 
+    String status;
     public void postTweet(View v) {
-       String status = ((EditText)findViewById(R.id.etTweet)).getText().toString();
+       status = ((EditText)findViewById(R.id.etTweet)).getText().toString();
 
        client.postTweet(new JsonHttpResponseHandler() {
            @Override
            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                Log.d("DEBUG", json.toString());
+               Intent tweet = new Intent();
+               tweet.putExtra("tweetBody", status);
+               setResult(RESULT_OK, tweet);
                finish();
 //               Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_LONG).show();
                // JSON HERE
@@ -72,6 +79,6 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     public void backToTimeline(View v) {
-        this.finish();
+        finish();
     }
 }
