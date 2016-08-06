@@ -1,12 +1,13 @@
 package com.codepath.apps.mysimpletweets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.ListView;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -25,7 +26,6 @@ public class TimelineActivity extends AppCompatActivity {
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
-    private ListView lvTweets;
 
     private long lowestUid;
 
@@ -94,4 +94,9 @@ public class TimelineActivity extends AppCompatActivity {
         return lowestUid;
     }
 
+    public void onComposeAction(MenuItem mi) {
+        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+//        i.putExtra("client", client);
+        startActivity(i);   // TODO: Return tweet?
+    }
 }

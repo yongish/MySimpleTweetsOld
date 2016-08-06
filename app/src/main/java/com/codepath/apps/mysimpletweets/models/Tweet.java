@@ -9,7 +9,9 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 // Parse the JSON + Store the data, encapsulate state logic or display logic
 public class Tweet {
@@ -18,6 +20,7 @@ public class Tweet {
     private long uid;   // unique id for the tweet
     private User user;  // store embedded user object
     private String createdAt;
+
 
     public String getBody() {
         return body;
@@ -78,7 +81,7 @@ public class Tweet {
 
         String relativeDate = "";
         try {
-            long dateMillis = sf.parse(rawJsonDate).getTime();
+            long dateMillis = sf.parse(rawJsonDate).getTime() - getTimeDifference();
             relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                     System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
         } catch (ParseException e) {
@@ -86,5 +89,12 @@ public class Tweet {
         }
 
         return relativeDate;
+    }
+
+    // Twitter does not provide timezone. Assume Central Time based on observation.
+    private static long getTimeDifference() {
+        TimeZone twitterTimeZone = TimeZone.getTimeZone("America/Chicago");
+        TimeZone systemTimeZone = Calendar.getInstance().getTimeZone();
+        return twitterTimeZone.getRawOffset() - systemTimeZone.getRawOffset() + twitterTimeZone.getDSTSavings() - systemTimeZone.getDSTSavings();
     }
 }

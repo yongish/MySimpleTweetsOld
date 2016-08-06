@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/profilePic"
+        android:layout_height="@dimen/profilePic"
         android:id="@+id/ivProfileImage"
         android:background="#5f8be6"
         android:padding="@dimen/ivPadding"

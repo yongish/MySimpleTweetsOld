@@ -4,6 +4,7 @@
     <item
         android:id="@+id/miActionButton"
         android:icon="@drawable/ic_create_black_24dp"
+        android:onClick="onComposeAction"
         app:showAsAction="ifRoom"
         android:title="Loading..." />
 </menu>

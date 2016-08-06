@@ -38,12 +38,18 @@ public class TwitterClient extends OAuthBaseClient {
 		// Specify the params
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
-		if (maxId != Long.MAX_VALUE) params.put("max_id", maxId);	// TODO: pagination maybe using a combination of count and since_id
+		if (maxId != Long.MAX_VALUE) params.put("max_id", maxId);
 		// Execute the request
 		getClient().get(apiUrl, params, handler);
 	}
 
 	// COMPOSE TWEET
+	public void postTweet(AsyncHttpResponseHandler handler, String status) {
+        String apiUrl = getApiUrl("statuses/update.json");
+        RequestParams params = new RequestParams();
+        params.put("status", status);
+		getClient().post(apiUrl, params, handler);
+    }
 
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
