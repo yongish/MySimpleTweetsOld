@@ -30,6 +30,8 @@
         android:text="New Text"
         android:maxLines="2"
         android:id="@+id/tvBody"
+        android:autoLink="all"
+        android:linksClickable="true"
         android:layout_alignBottom="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage" />
