@@ -45,19 +45,20 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/ivProfileImage"
+            android:id="@+id/ivOwnProfileImage"
             android:background="#5f8be6"
-            android:padding="@dimen/ivPadding"
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/btnCancel"
             android:layout_alignEnd="@+id/btnCancel"
             android:layout_marginBottom="172dp" />
 
         <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/textView" />
+            android:text="Name"
+            android:id="@+id/tvOwnName" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,6 +74,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="top"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/etTweet" />

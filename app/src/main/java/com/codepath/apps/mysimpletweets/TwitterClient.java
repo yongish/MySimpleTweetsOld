@@ -23,10 +23,11 @@ import org.scribe.builder.api.TwitterApi;
  */
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
-	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
-	public static final String REST_CONSUMER_KEY = "dLn3eZDuoSBIGWvKpKHdKlqQ1";       // Change this
-	public static final String REST_CONSUMER_SECRET = "QyDn9f6C3CUCyJRJC86Y16yNQvkDCXlzpN5ssXUlLNcPtqJdfH"; // Change this
-	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets"; // Change this (here and in manifest)
+	public static final String SCREEN_NAME = "zhiyongtan1";	// TODO: Is there a way to get current user id?
+	public static final String REST_URL = "https://api.twitter.com/1.1";
+	public static final String REST_CONSUMER_KEY = "dLn3eZDuoSBIGWvKpKHdKlqQ1";
+	public static final String REST_CONSUMER_SECRET = "QyDn9f6C3CUCyJRJC86Y16yNQvkDCXlzpN5ssXUlLNcPtqJdfH";
+	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets";
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
@@ -50,6 +51,13 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("status", status);
 		getClient().post(apiUrl, params, handler);
     }
+
+	public void getUser(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("users/show.json");
+		RequestParams params = new RequestParams();
+		params.put("screen_name", SCREEN_NAME);
+		getClient().get(apiUrl, params, handler);
+	}
 
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
