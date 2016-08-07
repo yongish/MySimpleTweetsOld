@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
@@ -102,7 +101,6 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
-
     // Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from the json
     private void populateTimeline() {
@@ -189,8 +187,4 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
-    public void openDetail(View v) {
-        Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
-        startActivity(i);
-    }
 }

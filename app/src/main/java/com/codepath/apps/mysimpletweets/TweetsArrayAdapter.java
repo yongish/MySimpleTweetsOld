@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.mysimpletweets.activities.DetailActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -59,7 +63,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
 
     @Override
     public void onBindViewHolder(TweetsArrayAdapter.ViewHolder viewHolder, int position) {
-        Tweet tweet = mTweets.get(position);
+        final Tweet tweet = mTweets.get(position);
 
         ImageView ivProfileImage = viewHolder.ivProfileImage;
         TextView tvUserName = viewHolder.tvUserName;
@@ -67,13 +71,23 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         TextView tvRelativeTimestamp = viewHolder.tvRelativeTimestamp;
 
         User user = tweet.getUser();
-        if (user != null)
+//        if (user != null)
             tvUserName.setText(tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
         tvRelativeTimestamp.setText(tweet.getTimeAgo());
         ivProfileImage.setImageResource(android.R.color.transparent);   // clear out the old image for a recycled view
-        if (user != null)
+//        if (user != null)
             Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+
+
+        tvBody.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), DetailActivity.class);
+                i.putExtra("tweet", Parcels.wrap(tweet));
+                view.getContext().startActivity(i);
+            }
+        });
     }
 
     @Override

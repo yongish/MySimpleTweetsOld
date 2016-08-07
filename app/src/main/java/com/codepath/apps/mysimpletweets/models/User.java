@@ -6,9 +6,11 @@ import com.activeandroid.annotation.Table;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.List;
 
+@Parcel(analyze = {User.class})
 @Table(name = "Users")
 public class User extends Model {
     @Column(name = "remote_id", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)

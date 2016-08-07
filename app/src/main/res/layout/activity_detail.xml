@@ -11,7 +11,7 @@
     <ImageView
         android:layout_width="@dimen/profilePic"
         android:layout_height="@dimen/profilePic"
-        android:id="@+id/ivProfileImage"
+        android:id="@+id/ivDetailImage"
         android:background="#5f8be6"
         android:padding="@dimen/ivPadding"
         android:layout_alignParentTop="true"
@@ -23,30 +23,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tweet_name"
-        android:id="@+id/tvUserName"
+        android:id="@+id/tvDetailName"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_toRightOf="@+id/ivDetailImage"
+        android:layout_toEndOf="@+id/ivDetailImage" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
         android:maxLines="2"
-        android:onClick="openDetail"
-        android:id="@+id/tvBody"
+        android:id="@+id/tvDetailBody"
         android:autoLink="all"
         android:linksClickable="true"
-        android:layout_alignBottom="@+id/ivProfileImage"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_below="@+id/ivDetailImage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="1m"
-        android:id="@+id/tvRelativeTimestamp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:id="@+id/tvDetailTimestamp"
+        android:layout_below="@+id/tvDetailBody"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

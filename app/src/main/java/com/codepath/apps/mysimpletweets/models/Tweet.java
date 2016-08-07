@@ -9,6 +9,7 @@ import com.activeandroid.annotation.Table;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 // Parse the JSON + Store the data, encapsulate state logic or display logic
+@Parcel(analyze = {Tweet.class})
 @Table(name = "Tweets")
 public class Tweet extends Model {
     @Column(name = "remote_id", unique = true)
