@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
@@ -131,6 +132,9 @@ public class TimelineActivity extends AppCompatActivity {
                     long tweetRemoteId = tweet.remote_id;
                     Tweet existingTweet = new Select().from(Tweet.class).where("remote_id = ?", tweetRemoteId).executeSingle();
                     if (existingTweet == null) {
+                        if (existingUser != null) {
+                            tweet.user = existingUser;
+                        }
                         tweet.save();
                     }
                 }
@@ -183,5 +187,10 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("FAILED GET USER DETAILS", errorResponse.toString());
             }
         });
+    }
+
+    public void openDetail(View v) {
+        Intent i = new Intent(TimelineActivity.this, DetailActivity.class);
+        startActivity(i);
     }
 }

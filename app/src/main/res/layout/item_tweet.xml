@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:text="New Text"
         android:maxLines="2"
+        android:onClick="openDetail"
         android:id="@+id/tvBody"
         android:autoLink="all"
         android:linksClickable="true"
