@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +32,7 @@ public class TimelineActivity extends AppCompatActivity {
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
-
+    private SwipeRefreshLayout swipeContainer;
     private long lowestUid;
 
     @Override
@@ -57,6 +58,18 @@ public class TimelineActivity extends AppCompatActivity {
                 populateTimeline();
             }
         });
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeline();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     @Override
@@ -71,6 +84,7 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
+
     // Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from the json
     private void populateTimeline() {
@@ -83,10 +97,12 @@ public class TimelineActivity extends AppCompatActivity {
                 // CREATE MODELS AND ADD THEM TO THE ADAPTER
                 // LOAD THE MODEL DATA INTO LISTVIEW
                 //aTweets.addAll(Tweet.fromJSONArray(json));
+                aTweets.clear();
                 ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
                 lowestUid = getLowestUid(newTweets);
                 tweets.addAll(newTweets);
                 aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
