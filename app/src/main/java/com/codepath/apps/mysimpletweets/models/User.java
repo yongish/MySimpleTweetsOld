@@ -11,7 +11,9 @@ import java.util.List;
 
 @Table(name = "Users")
 public class User extends Model {
-    @Column(name = "uid", unique = true)
+    @Column(name = "remote_id", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
+    public long remote_id;
+    @Column(name = "uid")
     public long uid;
     @Column(name = "name")
     public String name;
@@ -54,7 +56,7 @@ public class User extends Model {
         return u;
     }
 
-    public List<Tweet> tweets() {
+    public List<Tweet> items() {
         return getMany(Tweet.class, "User");
     }
 }

@@ -65,11 +65,14 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         TextView tvBody = viewHolder.tvBody;
         TextView tvRelativeTimestamp = viewHolder.tvRelativeTimestamp;
 
-        tvUserName.setText(tweet.getUser().getScreenName());
+//        User user = tweet.getUser();
+//        if (user != null)
+            tvUserName.setText(tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
         tvRelativeTimestamp.setText(tweet.getTimeAgo());
         ivProfileImage.setImageResource(android.R.color.transparent);   // clear out the old image for a recycled view
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+//        if (user != null)
+            Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
     }
 
     @Override

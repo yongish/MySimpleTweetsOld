@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
@@ -51,15 +52,9 @@ public class TimelineActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
 
+        Configuration.Builder config = new Configuration.Builder(this);
+        config.addModelClasses(Tweet.class, User.class);
         ActiveAndroid.initialize(this);
-        User user = new User();
-        user.uid = 1;
-        user.name = "a new user";
-        user.screenName = "user screename 1";
-        user.profileImageUrl = "profile image url here";
-        user.save();
-
-
 
         // Query ActiveAndroid for list of data and load result back to adapter user addAll
         List<Tweet> queryResults = new Select().from(Tweet.class).orderBy("created_at DESC").limit(100).execute();
@@ -70,6 +65,8 @@ public class TimelineActivity extends AppCompatActivity {
         lowestUid = Long.MAX_VALUE;
         client = TwitterApplication.getRestClient();    // singleton client
         populateTimeline();
+
+
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
@@ -125,14 +122,25 @@ public class TimelineActivity extends AppCompatActivity {
                 swipeContainer.setRefreshing(false);
 
                 // Add to database.
-                for (Tweet tweet: newTweets) {
-                    tweet.save();
+                for (Tweet tweet: tweets) {
+                    long userRemoteId = tweet.user.remote_id;
+                    User existingUser = new Select().from(User.class).where("remote_id = ?", userRemoteId).executeSingle();
+                    if (existingUser == null)
+                        tweet.user.save();
+
+                    long tweetRemoteId = tweet.remote_id;
+                    Tweet existingTweet = new Select().from(Tweet.class).where("remote_id = ?", tweetRemoteId).executeSingle();
+                    if (existingTweet == null) {
+                        tweet.save();
+                    }
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getBaseContext(), errorResponse.toString(), Toast.LENGTH_LONG).show();
+                String errString = "";
+                if (errorResponse != null) errString = errorResponse.toString();
+                Toast.makeText(getBaseContext(), errString, Toast.LENGTH_LONG).show();
             }
         }, lowestUid);
     }

@@ -20,7 +20,9 @@ import java.util.TimeZone;
 // Parse the JSON + Store the data, encapsulate state logic or display logic
 @Table(name = "Tweets")
 public class Tweet extends Model {
-    @Column(name = "uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "remote_id", unique = true)
+    public long remote_id;
+    @Column(name = "uid")
     public long uid;   // unique id for the tweet
     @Column(name = "body")
     public String body;
@@ -28,7 +30,7 @@ public class Tweet extends Model {
     public String createdAt;
     private String timeAgo;
     @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
-    public User user;  // store embedded user object
+    public User user;
 
     public Tweet() {
         super();
