@@ -1,16 +1,24 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcel;
 
-@Parcel
-public class User {
-    // list attributes
-    private String name;
-    private long uid;
-    private String screenName;
-    private String profileImageUrl;
+import java.util.List;
+
+@Table(name = "Users")
+public class User extends Model {
+    @Column(name = "uid", unique = true)
+    public long uid;
+    @Column(name = "name")
+    public String name;
+    @Column(name = "screen_name")
+    public String screenName;
+    @Column(name = "profile_image_url")
+    public String profileImageUrl;
 
     public String getName() {
         return name;
@@ -28,7 +36,9 @@ public class User {
         return profileImageUrl;
     }
 
-    public User() {}
+    public User() {
+        super();
+    }
 
     // deserialize the user json => User
     public static User fromJSON (JSONObject json) {
@@ -42,5 +52,9 @@ public class User {
             e.printStackTrace();
         }
         return u;
+    }
+
+    public List<Tweet> tweets() {
+        return getMany(Tweet.class, "User");
     }
 }

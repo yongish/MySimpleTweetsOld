@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
@@ -24,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -47,6 +50,23 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setAdapter(aTweets);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
+
+        ActiveAndroid.initialize(this);
+        User user = new User();
+        user.uid = 1;
+        user.name = "a new user";
+        user.screenName = "user screename 1";
+        user.profileImageUrl = "profile image url here";
+        user.save();
+
+
+
+        // Query ActiveAndroid for list of data and load result back to adapter user addAll
+        List<Tweet> queryResults = new Select().from(Tweet.class).orderBy("created_at DESC").limit(100).execute();
+        tweets.addAll(queryResults);
+        aTweets.notifyDataSetChanged();
+
+
         lowestUid = Long.MAX_VALUE;
         client = TwitterApplication.getRestClient();    // singleton client
         populateTimeline();
@@ -103,6 +123,11 @@ public class TimelineActivity extends AppCompatActivity {
                 tweets.addAll(newTweets);
                 aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
                 swipeContainer.setRefreshing(false);
+
+                // Add to database.
+                for (Tweet tweet: newTweets) {
+                    tweet.save();
+                }
             }
 
             @Override

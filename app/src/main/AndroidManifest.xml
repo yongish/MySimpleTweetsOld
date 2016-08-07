@@ -19,6 +19,9 @@
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="1" />
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="com.codepath.apps.mysimpletweets.models, com.codepath.apps.mysimpletweets.User" />
 
         <activity
             android:name=".activities.LoginActivity"

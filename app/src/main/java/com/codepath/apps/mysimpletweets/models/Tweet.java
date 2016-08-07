@@ -2,10 +2,13 @@ package com.codepath.apps.mysimpletweets.models;
 
 import android.text.format.DateUtils;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,20 +18,28 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 // Parse the JSON + Store the data, encapsulate state logic or display logic
-@Parcel
-public class Tweet {
-    // list out the attributes
-    private String body;
-    private long uid;   // unique id for the tweet
-    private User user;  // store embedded user object
-    private String createdAt;
+@Table(name = "Tweets")
+public class Tweet extends Model {
+    @Column(name = "uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public long uid;   // unique id for the tweet
+    @Column(name = "body")
+    public String body;
+    @Column(name = "created_at")
+    public String createdAt;
+    private String timeAgo;
+    @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    public User user;  // store embedded user object
 
-    public Tweet() {}
+    public Tweet() {
+        super();
+    }
 
     public Tweet(String body, User user) {
+        super();
         this.body = body;
         this.user = user;
-        this.createdAt = "Just now";
+        this.createdAt = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy").toString();
+        this.timeAgo = "Just now";
     }
 
     public String getBody() {
@@ -43,8 +54,8 @@ public class Tweet {
         return user;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getTimeAgo() {
+        return timeAgo;
     }
 
     // Deserialize the JSON
@@ -54,7 +65,8 @@ public class Tweet {
         try {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
-            tweet.createdAt = getRelativeTimeAgo(jsonObject.getString("created_at"));
+            tweet.createdAt = jsonObject.getString("created_at");
+            tweet.timeAgo = getRelativeTimeAgo(jsonObject.getString("created_at"));
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
             e.printStackTrace();
