@@ -43,8 +43,10 @@
         <activity
             android:name=".activities.TimelineActivity"
             android:label="Home Timeline" />
-        <activity android:name=".activities.ComposeActivity"
-            android:windowSoftInputMode="stateVisible"></activity>
+        <activity
+            android:name=".activities.ComposeActivity"
+            android:windowSoftInputMode="stateVisible" />
+        <activity android:name=".activities.DetailActivity"></activity>
     </application>
 
 </manifest>
