@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -65,13 +66,13 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         TextView tvBody = viewHolder.tvBody;
         TextView tvRelativeTimestamp = viewHolder.tvRelativeTimestamp;
 
-//        User user = tweet.getUser();
-//        if (user != null)
+        User user = tweet.getUser();
+        if (user != null)
             tvUserName.setText(tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
         tvRelativeTimestamp.setText(tweet.getTimeAgo());
         ivProfileImage.setImageResource(android.R.color.transparent);   // clear out the old image for a recycled view
-//        if (user != null)
+        if (user != null)
             Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
     }
 

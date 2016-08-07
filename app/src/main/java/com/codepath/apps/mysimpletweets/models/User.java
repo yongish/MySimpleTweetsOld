@@ -48,6 +48,7 @@ public class User extends Model {
         try {
             u.name = json.getString("name");
             u.uid = json.getLong("id");
+            u.remote_id = u.uid;
             u.screenName = json.getString("screen_name");
             u.profileImageUrl = json.getString("profile_image_url");
         } catch (JSONException e) {

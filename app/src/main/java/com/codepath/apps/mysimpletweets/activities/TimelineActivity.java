@@ -122,7 +122,7 @@ public class TimelineActivity extends AppCompatActivity {
                 swipeContainer.setRefreshing(false);
 
                 // Add to database.
-                for (Tweet tweet: tweets) {
+                for (Tweet tweet: newTweets) {
                     long userRemoteId = tweet.user.remote_id;
                     User existingUser = new Select().from(User.class).where("remote_id = ?", userRemoteId).executeSingle();
                     if (existingUser == null)
