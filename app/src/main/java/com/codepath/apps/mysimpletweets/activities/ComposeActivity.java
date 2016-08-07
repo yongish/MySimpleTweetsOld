@@ -31,6 +31,12 @@ public class ComposeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_compose);
         client = TwitterApplication.getRestClient();
         getOwnUserDetails();
+
+        String replyTo = getIntent().getStringExtra("name");
+        if (replyTo != null) {
+            TextView etTweet = (TextView) findViewById(R.id.etTweet);
+            etTweet.append("@" + replyTo + " ");
+        }
     }
 
     public void getOwnUserDetails() {
