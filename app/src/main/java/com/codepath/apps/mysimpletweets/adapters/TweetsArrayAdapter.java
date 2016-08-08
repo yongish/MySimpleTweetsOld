@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.activities.DetailActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
@@ -77,7 +78,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         tvRelativeTimestamp.setText(tweet.getTimeAgo());
         ivProfileImage.setImageResource(android.R.color.transparent);   // clear out the old image for a recycled view
 //        if (user != null)
-            Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+            Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
 
 
         tvBody.setOnClickListener(new View.OnClickListener() {

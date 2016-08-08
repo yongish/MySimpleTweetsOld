@@ -8,8 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
-import java.util.List;
-
 @Parcel(analyze = {User.class})
 @Table(name = "Users")
 public class User extends Model {
@@ -57,9 +55,5 @@ public class User extends Model {
             e.printStackTrace();
         }
         return u;
-    }
-
-    public List<Tweet> items() {
-        return getMany(Tweet.class, "User");
     }
 }

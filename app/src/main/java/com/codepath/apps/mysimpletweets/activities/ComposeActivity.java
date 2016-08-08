@@ -9,12 +9,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -46,7 +46,7 @@ public class ComposeActivity extends AppCompatActivity {
                 self = User.fromJSON(json);
                 TextView tvOwnName = (TextView) findViewById(R.id.tvOwnName);
                 tvOwnName.setText("@" + TwitterClient.SCREEN_NAME);
-                Picasso.with(getBaseContext()).load(self.getProfileImageUrl()).into((ImageView)findViewById(R.id.ivOwnProfileImage));
+                Glide.with(getBaseContext()).load(self.getProfileImageUrl()).into((ImageView)findViewById(R.id.ivOwnProfileImage));
             }
 
             @Override
