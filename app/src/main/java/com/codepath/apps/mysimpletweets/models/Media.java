@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets.models;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
 import org.json.JSONArray;
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+@Table(name = "Medias")
 public class Media extends Model {
     @Column(name = "remote_id", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
     public long remote_id;

@@ -17,16 +17,26 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     TextView tvDetailName;
     List<Media> medias;
+    MediaAdapter aMedias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        medias = new ArrayList<>();
+        RecyclerView rvMedia = (RecyclerView) findViewById(R.id.rvMedia);
+
+        aMedias = new MediaAdapter(this, medias);
+        rvMedia.setAdapter(aMedias);
+        rvMedia.setLayoutManager(new LinearLayoutManager(this));
+
 
         loadDetails();
     }
@@ -40,21 +50,24 @@ public class DetailActivity extends AppCompatActivity {
         tvDetailName = (TextView) findViewById(R.id.tvDetailName);
         tvDetailName.setText(tweet.user.screenName);
 
+        TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
+        tvDetailBody.setText(tweet.body);
+
         TextView tvDetailTimestamp = (TextView) findViewById(R.id.tvDetailTimestamp);
         tvDetailTimestamp.setText(tweet.createdAt);
+
+//        ImageView ivDetailImageOnly = (ImageView) findViewById(R.id.ivDetailImageOnly);
+//        String url = "https://pbs.twimg.com/media/CpTHP3wVIAA7oLs.jpg";
+//        Glide.with(getBaseContext()).load(url).into(ivDetailImageOnly);
+//        Glide.with(getBaseContext()).load("http://pbs.twimg.com/media/CpRczRjWYAA04SK.jpg").into(ivDetailImageOnly);
 
         // Load media images.
         loadImages(tweet.remote_id);
     }
 
     private void loadImages(long rid) {
-        RecyclerView rvMedia = (RecyclerView) findViewById(R.id.rvMedia);
         medias = Media.getAll(rid);
-        if (medias != null && medias.size() > 0) {
-            MediaAdapter adapter = new MediaAdapter(this, medias);
-            rvMedia.setAdapter(adapter);
-            rvMedia.setLayoutManager(new LinearLayoutManager(this));
-        }
+        aMedias.notifyDataSetChanged();
     }
 
     public void compose(View v) {

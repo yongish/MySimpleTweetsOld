@@ -1,8 +1,8 @@
-# Project 3 - *Name of App Here*
+# Project 3 - MySimpleTweets
 
-**Name of your app** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
+MySimpleTweets is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **X** hours spent in total
+Time spent: 30 hours spent in total
 
 ## User Stories
 
@@ -50,12 +50,13 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![Video Walkthrough](video.gif?raw=true "video")
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
+Attempted to implement another Recyclerview in Tweet's DetailActivity to display a list of images, but could not get the recycler view to display.
 
 ## Open-source libraries used
 

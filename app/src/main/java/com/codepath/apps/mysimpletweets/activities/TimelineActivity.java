@@ -15,9 +15,10 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.utils.EndlessRecyclerViewScrollListener;
@@ -53,7 +54,7 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setLayoutManager(linearLayoutManager);
 
         Configuration.Builder config = new Configuration.Builder(this);
-        config.addModelClasses(Tweet.class, User.class);
+        config.addModelClasses(Tweet.class, User.class, Media.class);
         ActiveAndroid.initialize(this);
 
         // Query ActiveAndroid for list of data and load result back to adapter user addAll
@@ -87,12 +88,6 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        populateTimeline();
     }
 
     @Override

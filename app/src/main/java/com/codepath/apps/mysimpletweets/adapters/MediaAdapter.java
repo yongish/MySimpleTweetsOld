@@ -52,7 +52,10 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         Media media = mMedia.get(position);
 
         ImageView ivMedia = viewHolder.ivMedia;
-        Glide.with(getContext()).load(media.mediaUrl).into(ivMedia);
+        String url = "https://pbs.twimg.com/media/CpTHP3wVIAA7oLs.jpg";
+        Glide.with(getContext()).load(url).into(ivMedia);
+//        Glide.with(getContext()).load("http://pbs.twimg.com/media/CpRczRjWYAA04SK.jpg").into(ivMedia);
+//        Glide.with(getContext()).load(media.mediaUrl).into(ivMedia);
     }
 
     @Override

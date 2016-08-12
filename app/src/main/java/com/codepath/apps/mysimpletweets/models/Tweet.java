@@ -73,8 +73,9 @@ public class Tweet extends Model {
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.timeAgo = getRelativeTimeAgo(jsonObject.getString("created_at"));
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+
             // Add media URLs to Media table.
-            Media.addAll(tweet.remote_id, jsonObject.getJSONArray("media"));
+            Media.addAll(tweet.remote_id, jsonObject.getJSONObject("entities").getJSONArray("media"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
