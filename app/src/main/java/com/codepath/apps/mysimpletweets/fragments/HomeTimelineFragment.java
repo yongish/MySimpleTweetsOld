@@ -27,6 +27,15 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         lowestUid = Long.MAX_VALUE;
         client = TwitterApplication.getRestClient();    // singleton client
+
+/*        Configuration.Builder config = new Configuration.Builder(getActivity());
+        config.addModelClasses(Tweet.class, User.class, Media.class);
+        ActiveAndroid.initialize(getActivity());
+
+        // Query ActiveAndroid for list of data and load result back to adapter user addAll
+        List<Tweet> queryResults = new Select().from(Tweet.class).orderBy("created_at DESC").limit(100).execute();
+        addAll(queryResults);*/
+
         populateTimeline();
     }
 

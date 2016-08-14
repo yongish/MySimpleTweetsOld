@@ -10,12 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.activeandroid.ActiveAndroid;
-import com.activeandroid.Configuration;
-import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
-import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.utils.EndlessRecyclerViewScrollListener;
@@ -77,19 +73,11 @@ public class TweetsListFragment extends Fragment {
 
         tweets = new ArrayList<>();
 
-        Configuration.Builder config = new Configuration.Builder(getActivity());
-        config.addModelClasses(Tweet.class, User.class, Media.class);
-        ActiveAndroid.initialize(getActivity());
-
-        // Query ActiveAndroid for list of data and load result back to adapter user addAll
-        List<Tweet> queryResults = new Select().from(Tweet.class).orderBy("created_at DESC").limit(100).execute();
-        tweets.addAll(queryResults);
-
 //        aTweets.notifyDataSetChanged();
-        if (savedInstanceState == null) {
-            activityTimeline = (HomeTimelineFragment) getFragmentManager().findFragmentById(R.id.fragment_timeline);
+//        if (savedInstanceState == null) {
+//            activityTimeline = (HomeTimelineFragment) getFragmentManager().findFragmentById(R.id.fragment_timeline);
 //            activityTimeline = (TimelineActivity) getActivity();
-        }
+//        }
     }
 
 
