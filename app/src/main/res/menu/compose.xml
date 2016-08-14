@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
     <item
         android:id="@+id/miProfile"
         app:showAsAction="always"
@@ -8,4 +10,11 @@
         android:title="Profile"
         android:onClick="onProfileView"
         />
+
+    <item
+        android:id="@+id/miActionButton"
+        android:icon="@drawable/ic_create_black_24dp"
+        android:onClick="onComposeAction"
+        app:showAsAction="never"
+        android:title="Loading..." />
 </menu>
