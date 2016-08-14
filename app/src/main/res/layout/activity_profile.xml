@@ -54,12 +54,14 @@
 
         <TextView
             android:id="@+id/tvFollowers"
+            android:onClick="showFollowers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5 Followers" />
 
         <TextView
             android:id="@+id/tvFollowing"
+            android:onClick="showFriends"
             android:layout_width="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_height="wrap_content"

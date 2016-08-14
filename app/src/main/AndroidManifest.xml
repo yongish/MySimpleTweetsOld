@@ -51,7 +51,9 @@
             android:windowSoftInputMode="stateVisible" />
         <activity android:name=".activities.DetailActivity" />
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".RelationshipActivity"></activity>
+        <activity android:name=".RelationshipActivity" />
+        <activity android:name=".activities.FriendsActivity" />
+        <activity android:name=".activities.FollowersActivity"></activity>
     </application>
 
 </manifest>

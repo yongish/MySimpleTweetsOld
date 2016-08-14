@@ -59,8 +59,6 @@
         android:onClick="compose"
         android:src="@drawable/ic_reply_black_24dp" />
 
-
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMedia"
         android:layout_width="match_parent"

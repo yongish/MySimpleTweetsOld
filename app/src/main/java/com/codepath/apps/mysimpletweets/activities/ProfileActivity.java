@@ -1,17 +1,19 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
@@ -73,5 +75,15 @@ public class ProfileActivity extends AppCompatActivity {
         tvFollowers.setText(user.getFollowersCount() + " Followers");
         tvFollowing.setText(user.getFriendsCount() + " Following");
         Glide.with(getBaseContext()).load(user.getProfileImageUrl()).into(ivProfileImage);
+    }
+
+    public void showFriends(View v) {
+        Intent i = new Intent(this, FriendsActivity.class);
+        startActivity(i);
+    }
+
+    public void showFollowers(View v) {
+        Intent i = new Intent(this, FollowersActivity.class);
+        startActivity(i);
     }
 }

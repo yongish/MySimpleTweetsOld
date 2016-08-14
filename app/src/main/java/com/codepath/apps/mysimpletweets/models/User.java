@@ -4,9 +4,12 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
 
 @Parcel(analyze = {User.class})
 @Table(name = "Users")
@@ -73,5 +76,33 @@ public class User extends Model {
             e.printStackTrace();
         }
         return u;
+    }
+
+    public static ArrayList<User> fromRelationships (JSONObject json) {
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            JSONArray jsonArray = json.getJSONArray("users");
+            users = fromJSONArray(jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public static ArrayList<User> fromJSONArray (JSONArray jsonArray) {
+        ArrayList<User> users = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject userJson = jsonArray.getJSONObject(i);
+                User user = User.fromJSON(userJson);
+                if (user != null) {
+                    users.add(user);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return users;
     }
 }

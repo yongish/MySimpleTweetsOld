@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="@dimen/profilePic"
+        android:layout_height="@dimen/profilePic"
+        android:id="@+id/ivUser"
+        android:background="#5f8be6"
+        android:padding="@dimen/ivPadding"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tweet_name"
+        android:id="@+id/tvName"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ivUser"
+        android:layout_toEndOf="@+id/ivUser" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvUserScreenName"
+        android:layout_below="@+id/tvName"
+        android:layout_toRightOf="@+id/ivUser"
+        android:layout_toEndOf="@+id/ivUser" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvUserDescription"
+        android:layout_below="@+id/tvUserScreenName"
+        android:layout_toRightOf="@+id/ivUser"
+        android:layout_toEndOf="@+id/ivUser" />
+</RelativeLayout>
