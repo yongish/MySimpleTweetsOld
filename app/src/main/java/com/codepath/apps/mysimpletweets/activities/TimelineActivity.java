@@ -52,7 +52,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     // Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from the json
-    private void populateTimeline() {
+    public void populateTimeline() {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
@@ -69,7 +69,7 @@ public class TimelineActivity extends AppCompatActivity {
 //                tweets.addAll(newTweets);
                 fragmentTweetsList.addAll(newTweets);
 //                aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
-//                swipeContainer.setRefreshing(false);
+                fragmentTweetsList.setSwipeContainerRefreshingFalse();
 
                 // Add to database.
                 for (Tweet tweet: newTweets) {

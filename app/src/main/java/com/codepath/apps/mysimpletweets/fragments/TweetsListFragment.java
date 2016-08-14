@@ -14,6 +14,7 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -29,6 +30,8 @@ public class TweetsListFragment extends Fragment {
     private TweetsArrayAdapter aTweets;
     private RecyclerView rvTweets;
     private SwipeRefreshLayout swipeContainer;
+
+    private TimelineActivity activityTimeline;
 
     // inflation logic
 
@@ -48,6 +51,7 @@ public class TweetsListFragment extends Fragment {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
 //                populateTimeline();
+                activityTimeline.populateTimeline();
             }
         });
 
@@ -56,7 +60,7 @@ public class TweetsListFragment extends Fragment {
             @Override
             public void onRefresh() {
 //                populateTimeline();
-
+                activityTimeline.populateTimeline();
             }
         });
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -83,10 +87,17 @@ public class TweetsListFragment extends Fragment {
         tweets.addAll(queryResults);
 
 //        aTweets.notifyDataSetChanged();
+        if (savedInstanceState == null) {
+            activityTimeline = (TimelineActivity) getActivity();
+        }
     }
 
     public void addAll(List<Tweet> tweets) {
         aTweets.addAll(tweets);
+    }
+
+    public void setSwipeContainerRefreshingFalse() {
+        swipeContainer.setRefreshing(false);
     }
 
     private long getLowestUid(ArrayList<Tweet> tweets) {
