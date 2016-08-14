@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -84,30 +86,34 @@ public class UserTimelineFragment extends TweetsListFragment {
     public void populateTimeline() {
         String screenName = getArguments().getString("screen_name");
         lowestUid = getLowestUid(tweets);
-        client.getUserTimeline(lowestUid, screenName, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                Log.d("DEBUG", json.toString());
-                // JSON HERE
-                // DESERIALIZE JSON
-                // CREATE MODELS AND ADD THEM TO THE ADAPTER
-                // LOAD THE MODEL DATA INTO LISTVIEW
-                //aTweets.addAll(Tweet.fromJSONArray(json));
+        if (TwitterClient.isOnline()) {
+            client.getUserTimeline(lowestUid, screenName, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                    Log.d("DEBUG", json.toString());
+                    // JSON HERE
+                    // DESERIALIZE JSON
+                    // CREATE MODELS AND ADD THEM TO THE ADAPTER
+                    // LOAD THE MODEL DATA INTO LISTVIEW
+                    //aTweets.addAll(Tweet.fromJSONArray(json));
 
 //                aTweets.clear();
-                ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
+                    ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
 
-                tweets.addAll(newTweets);
-                aTweets.addAll(newTweets);
-                setSwipeContainerRefreshingFalse();
+                    tweets.addAll(newTweets);
+                    aTweets.addAll(newTweets);
+                    setSwipeContainerRefreshingFalse();
 
-            }
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                String errString = "";
-                if (errorResponse != null) errString = errorResponse.toString();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    String errString = "";
+                    if (errorResponse != null) errString = errorResponse.toString();
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 }

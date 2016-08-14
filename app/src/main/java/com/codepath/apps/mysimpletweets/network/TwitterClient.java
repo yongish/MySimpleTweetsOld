@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.network;
 
 import android.content.Context;
 
@@ -9,6 +9,8 @@ import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
+
+import java.io.IOException;
 
 /*
  * 
@@ -94,6 +96,18 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("screen_name", SCREEN_NAME);
 		getClient().get(apiUrl, params, handler);
+	}
+
+
+	public static boolean isOnline() {
+		Runtime runtime = Runtime.getRuntime();
+		try {
+			Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+			int     exitValue = ipProcess.waitFor();
+			return (exitValue == 0);
+		} catch (IOException e)          { e.printStackTrace(); }
+		catch (InterruptedException e) { e.printStackTrace(); }
+		return false;
 	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint

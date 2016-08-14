@@ -9,18 +9,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
-import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.utils.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -92,67 +93,75 @@ public class HomeTimelineFragment extends TweetsListFragment {
     public void populateTimeline() {
         lowestUid = getLowestUid(tweets);
 
-        client.getHomeTimeline(lowestUid, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                Log.d("DEBUG", json.toString());
-                // JSON HERE
-                // DESERIALIZE JSON
-                // CREATE MODELS AND ADD THEM TO THE ADAPTER
-                // LOAD THE MODEL DATA INTO LISTVIEW
-                //aTweets.addAll(Tweet.fromJSONArray(json));
+        if (TwitterClient.isOnline()) {
+            client.getHomeTimeline(lowestUid, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                    Log.d("DEBUG", json.toString());
+                    // JSON HERE
+                    // DESERIALIZE JSON
+                    // CREATE MODELS AND ADD THEM TO THE ADAPTER
+                    // LOAD THE MODEL DATA INTO LISTVIEW
+                    //aTweets.addAll(Tweet.fromJSONArray(json));
 
 //                aTweets.clear();
-                ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
+                    ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
 //                lowestUid = getLowestUid(newTweets);
-                tweets.addAll(newTweets);
-                aTweets.addAll(newTweets);
+                    tweets.addAll(newTweets);
+                    aTweets.addAll(newTweets);
 //                addAll(newTweets);
 //                aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
-                setSwipeContainerRefreshingFalse();
+                    setSwipeContainerRefreshingFalse();
 
-                // Add to database.
-                for (Tweet tweet: newTweets) {
-                    long userRemoteId = tweet.user.remote_id;
-                    User existingUser = new Select().from(User.class).where("remote_id = ?", userRemoteId).executeSingle();
-                    if (existingUser == null)
-                        tweet.user.save();
+                    // Add to database.
+                    for (Tweet tweet : newTweets) {
+                        long userRemoteId = tweet.user.remote_id;
+                        User existingUser = new Select().from(User.class).where("remote_id = ?", userRemoteId).executeSingle();
+                        if (existingUser == null)
+                            tweet.user.save();
 
-                    long tweetRemoteId = tweet.remote_id;
-                    Tweet existingTweet = new Select().from(Tweet.class).where("remote_id = ?", tweetRemoteId).executeSingle();
-                    if (existingTweet == null) {
-                        if (existingUser != null) {
-                            tweet.user = existingUser;
+                        long tweetRemoteId = tweet.remote_id;
+                        Tweet existingTweet = new Select().from(Tweet.class).where("remote_id = ?", tweetRemoteId).executeSingle();
+                        if (existingTweet == null) {
+                            if (existingUser != null) {
+                                tweet.user = existingUser;
+                            }
+                            tweet.save();
                         }
-                        tweet.save();
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                String errString = "";
-                if (errorResponse != null) errString = errorResponse.toString();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    String errString = "";
+                    if (errorResponse != null) errString = errorResponse.toString();
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "Check your connection", Toast.LENGTH_LONG).show();
+        }
     }
 
 
     public void getOwnUserDetails(final String tweetBody) {
-        client.getUsersShow(TwitterClient.SCREEN_NAME, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                User self = User.fromJSON(json);
+        if (TwitterClient.isOnline()) {
+            client.getUsersShow(TwitterClient.SCREEN_NAME, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                    User self = User.fromJSON(json);
 
-                tweets.add(0, new Tweet(tweetBody, self));    // Add to front of list.
-                aTweets.notifyDataSetChanged();
-            }
+                    tweets.add(0, new Tweet(tweetBody, self));    // Add to front of list.
+                    aTweets.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("FAILED GET USER DETAILS", errorResponse.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("FAILED GET USER DETAILS", errorResponse.toString());
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
 

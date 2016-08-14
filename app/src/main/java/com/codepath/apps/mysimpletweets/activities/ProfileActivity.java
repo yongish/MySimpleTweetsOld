@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
@@ -32,26 +33,30 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Get the screen name
         String screenName = getIntent().getStringExtra("screen_name");
-        if (screenName == null) {
-            // Get the account info
-            client.getUserInfo(new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    user = User.fromJSON(response);
-                    // My current user account's info
-                    getSupportActionBar().setTitle("@" + user.getScreenName());
-                    populateProfileHeader(user);
-                }
-            });
+        if (TwitterClient.isOnline()) {
+            if (screenName == null) {
+                // Get the account info
+                client.getUserInfo(new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        user = User.fromJSON(response);
+                        // My current user account's info
+                        getSupportActionBar().setTitle("@" + user.getScreenName());
+                        populateProfileHeader(user);
+                    }
+                });
+            } else {
+                client.getUsersShow(screenName, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        user = User.fromJSON(response);
+                        getSupportActionBar().setTitle("@" + user.getScreenName());
+                        populateProfileHeader(user);
+                    }
+                });
+            }
         } else {
-            client.getUsersShow(screenName, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    user = User.fromJSON(response);
-                    getSupportActionBar().setTitle("@" + user.getScreenName());
-                    populateProfileHeader(user);
-                }
-            });
+            Toast.makeText(this, "Check Internet Connection", Toast.LENGTH_LONG).show();
         }
 
         if (savedInstanceState == null) {

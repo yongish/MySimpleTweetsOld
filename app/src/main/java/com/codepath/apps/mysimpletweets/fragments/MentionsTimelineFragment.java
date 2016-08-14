@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -68,7 +70,11 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         aTweets = new TweetsArrayAdapter(getActivity(), tweets);
 
         client = TwitterApplication.getRestClient();    // singleton client
-        populateTimeline();
+        if (TwitterClient.isOnline()) {
+            populateTimeline();
+        } else {
+            Toast.makeText(getContext(), "Check Internect Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     // Send an API request to get the timeline json

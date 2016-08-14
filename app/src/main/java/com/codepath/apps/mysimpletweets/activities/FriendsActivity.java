@@ -4,9 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.adapters.FriendsAdapter;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.utils.TwitterApplication;
@@ -36,13 +37,17 @@ public class FriendsActivity extends AppCompatActivity {
         rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
 
-        client.getFriendsList(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                ArrayList<User> newUsers = User.fromRelationships(json);
-                users.addAll(newUsers);
-                adapter.notifyDataSetChanged();
-            }
-        });
+        if (TwitterClient.isOnline()) {
+            client.getFriendsList(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                    ArrayList<User> newUsers = User.fromRelationships(json);
+                    users.addAll(newUsers);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Check Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 }

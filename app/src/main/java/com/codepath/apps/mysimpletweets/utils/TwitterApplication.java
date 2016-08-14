@@ -2,7 +2,7 @@ package com.codepath.apps.mysimpletweets.utils;
 
 import android.content.Context;
 
-import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 
 /*
  * This is the Android application itself and is used to configure various settings

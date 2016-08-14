@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 
 import java.util.List;
@@ -52,4 +52,5 @@ public class TweetsListFragment extends Fragment {
         }
         return lowestUid;
     }
+
 }
