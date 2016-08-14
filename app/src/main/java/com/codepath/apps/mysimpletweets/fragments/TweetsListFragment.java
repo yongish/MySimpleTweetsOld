@@ -97,7 +97,7 @@ public class TweetsListFragment extends Fragment {
         swipeContainer.setRefreshing(false);
     }
 
-    protected long getLowestUid() {
+    protected long getLowestUid(List<Tweet> tweets) {
 //        protected long getLowestUid(ArrayList<Tweet> tweets) {
             long lowestUid = Long.MAX_VALUE;
         for (Tweet tweet: tweets) {

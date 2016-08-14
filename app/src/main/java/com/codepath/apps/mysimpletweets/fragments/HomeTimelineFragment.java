@@ -15,6 +15,7 @@ import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
+import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -95,9 +96,9 @@ public class HomeTimelineFragment extends TweetsListFragment {
     // Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from the json
     public void populateTimeline() {
-        lowestUid = getLowestUid();
+        lowestUid = getLowestUid(tweets);
 
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        client.getHomeTimeline(lowestUid, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 Log.d("DEBUG", json.toString());
@@ -139,12 +140,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 String errString = "";
                 if (errorResponse != null) errString = errorResponse.toString();
             }
-        }, lowestUid);
+        });
     }
 
 
     public void getOwnUserDetails(final String tweetBody) {
-        client.getUser(new JsonHttpResponseHandler() {
+        client.getUsersShow(TwitterClient.SCREEN_NAME, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 User self = User.fromJSON(json);
@@ -172,15 +173,5 @@ public class HomeTimelineFragment extends TweetsListFragment {
         this.tweets.addAll(tweets);
         aTweets.addAll(tweets);
         aTweets.notifyDataSetChanged();
-    }
-
-    protected long getLowestUid() {
-//        protected long getLowestUid(ArrayList<Tweet> tweets) {
-        long lowestUid = Long.MAX_VALUE;
-        for (Tweet tweet: tweets) {
-            long uid = tweet.getUid();
-            if (uid < lowestUid) lowestUid = uid;
-        }
-        return lowestUid;
     }
 }

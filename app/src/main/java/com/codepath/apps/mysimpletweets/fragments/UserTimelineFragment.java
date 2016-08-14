@@ -2,11 +2,19 @@ package com.codepath.apps.mysimpletweets.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
-import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -17,11 +25,51 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 
 public class UserTimelineFragment extends TweetsListFragment {
-    private TwitterClient client;
+    private long lowestUid;
+    private RecyclerView rvTweets;
+    private ArrayList<Tweet> tweets;
+    private TweetsArrayAdapter aTweets;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_tweets_list, container, false);
+
+        rvTweets = (RecyclerView) v.findViewById(R.id.rvTweets);
+
+        rvTweets.setAdapter(aTweets);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        rvTweets.setLayoutManager(linearLayoutManager);
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                populateTimeline();
+            }
+        });
+
+        swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeline();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        return v;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        tweets = new ArrayList<>();
+        aTweets = new TweetsArrayAdapter(getActivity(), tweets);
 
         client = TwitterApplication.getRestClient();    // singleton client
         populateTimeline();
@@ -31,19 +79,16 @@ public class UserTimelineFragment extends TweetsListFragment {
         UserTimelineFragment userFragment = new UserTimelineFragment();
         Bundle args = new Bundle();
         args.putString("screen_name", screen_name);
+        userFragment.setArguments(args);
         return userFragment;
     }
 
     // Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from the json
     public void populateTimeline() {
-        String screenName = null;
-        Bundle args = getArguments();
-        if (args != null) {
-            screenName = args.getString("screen_name");
-        }
-
-        client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+        String screenName = getArguments().getString("screen_name");
+        lowestUid = getLowestUid(tweets);
+        client.getUserTimeline(lowestUid, screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 Log.d("DEBUG", json.toString());
@@ -55,28 +100,11 @@ public class UserTimelineFragment extends TweetsListFragment {
 
 //                aTweets.clear();
                 ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
-//                lowestUid = getLowestUid(newTweets);
-//                tweets.addAll(newTweets);
-                addAll(newTweets);
-//                aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
-//                setSwipeContainerRefreshingFalse();
 
-//                // Add to database.
-//                for (Tweet tweet: newTweets) {
-//                    long userRemoteId = tweet.user.remote_id;
-//                    User existingUser = new Select().from(User.class).where("remote_id = ?", userRemoteId).executeSingle();
-//                    if (existingUser == null)
-//                        tweet.user.save();
-//
-//                    long tweetRemoteId = tweet.remote_id;
-//                    Tweet existingTweet = new Select().from(Tweet.class).where("remote_id = ?", tweetRemoteId).executeSingle();
-//                    if (existingTweet == null) {
-//                        if (existingUser != null) {
-//                            tweet.user = existingUser;
-//                        }
-//                        tweet.save();
-//                    }
-//                }
+                tweets.addAll(newTweets);
+                aTweets.addAll(newTweets);
+                setSwipeContainerRefreshingFalse();
+
             }
 
             @Override

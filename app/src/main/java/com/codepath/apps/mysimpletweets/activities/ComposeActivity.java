@@ -40,7 +40,7 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     public void getOwnUserDetails() {
-        client.getUser(new JsonHttpResponseHandler() {
+        client.getUsersShow(TwitterClient.SCREEN_NAME, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 self = User.fromJSON(json);

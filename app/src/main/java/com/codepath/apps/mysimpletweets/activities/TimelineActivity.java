@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
@@ -61,6 +63,14 @@ public class TimelineActivity extends AppCompatActivity {
     public void onProfileView(MenuItem mi) {
         // Launch the profile view
         Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
+    }
+
+    public void openProfile(View v) {
+        // Name of user
+        TextView tvFullName = (TextView) findViewById(R.id.tvUserName);
+        Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("screen_name", tvFullName.getText());
         startActivity(i);
     }
 

@@ -66,6 +66,9 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        tweets = new ArrayList<>();
+        aTweets = new TweetsArrayAdapter(getActivity(), tweets);
+
         client = TwitterApplication.getRestClient();    // singleton client
         populateTimeline();
     }
@@ -86,9 +89,9 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 //                aTweets.clear();
                 ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
 //                lowestUid = getLowestUid(newTweets);
-                tweets.addAll(newTweets);
-                aTweets.addAll(newTweets);
-//                addAll(newTweets);
+//                tweets.addAll(newTweets);
+//                aTweets.addAll(newTweets);
+                addAll(newTweets);
 //                aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
                 setSwipeContainerRefreshingFalse();
 

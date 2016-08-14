@@ -10,6 +10,7 @@
         android:id="@+id/ivProfileImage"
         android:background="#5f8be6"
         android:padding="@dimen/ivPadding"
+        android:onClick="openProfile"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
