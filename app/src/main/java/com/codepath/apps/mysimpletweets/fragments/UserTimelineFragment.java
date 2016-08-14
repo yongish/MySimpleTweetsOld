@@ -16,22 +16,34 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MentionsTimelineFragment extends TweetsListFragment {
+public class UserTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
-    private long lowestUid;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lowestUid = Long.MAX_VALUE;
+
         client = TwitterApplication.getRestClient();    // singleton client
         populateTimeline();
+    }
+
+    public static UserTimelineFragment newInstance(String screen_name) {
+        UserTimelineFragment userFragment = new UserTimelineFragment();
+        Bundle args = new Bundle();
+        args.putString("screen_name", screen_name);
+        return userFragment;
     }
 
     // Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from the json
     public void populateTimeline() {
-        client.getMentionsTimeline(new JsonHttpResponseHandler() {
+        String screenName = null;
+        Bundle args = getArguments();
+        if (args != null) {
+            screenName = args.getString("screen_name");
+        }
+
+        client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 Log.d("DEBUG", json.toString());

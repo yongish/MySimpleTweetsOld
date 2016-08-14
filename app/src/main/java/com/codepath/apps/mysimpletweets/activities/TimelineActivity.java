@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
@@ -31,8 +32,9 @@ public class TimelineActivity extends AppCompatActivity {
         // Set the viewpager adapter for the pager
         vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
         // Find the pager sliding tabs
-
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the pager tabs to the viewpager
+        tabStrip.setViewPager(vpPager);
     }
 
     @Override
@@ -54,6 +56,12 @@ public class TimelineActivity extends AppCompatActivity {
             String tweetBody = data.getExtras().getString("tweetBody");
             fragment.getOwnUserDetails(tweetBody);
         }
+    }
+
+    public void onProfileView(MenuItem mi) {
+        // Launch the profile view
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
     }
 
     // Return the order of the fragments in the view pager
