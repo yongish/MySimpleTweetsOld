@@ -14,7 +14,6 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -31,7 +30,7 @@ public class TweetsListFragment extends Fragment {
     private RecyclerView rvTweets;
     private SwipeRefreshLayout swipeContainer;
 
-    private TimelineActivity activityTimeline;
+    private HomeTimelineFragment activityTimeline;
 
     // inflation logic
 
@@ -88,12 +87,21 @@ public class TweetsListFragment extends Fragment {
 
 //        aTweets.notifyDataSetChanged();
         if (savedInstanceState == null) {
-            activityTimeline = (TimelineActivity) getActivity();
+            activityTimeline = (HomeTimelineFragment) getFragmentManager().findFragmentById(R.id.fragment_timeline);
+//            activityTimeline = (TimelineActivity) getActivity();
         }
     }
 
+
+    public void addToFront(String tweetBody, User user) {
+        tweets.add(0, new Tweet(tweetBody, user));
+        aTweets.notifyDataSetChanged();
+    }
+
     public void addAll(List<Tweet> tweets) {
+        this.tweets.addAll(tweets);
         aTweets.addAll(tweets);
+        aTweets.notifyDataSetChanged();
     }
 
     public void setSwipeContainerRefreshingFalse() {
