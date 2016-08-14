@@ -21,6 +21,9 @@ public class User extends Model {
     public String screenName;
     @Column(name = "profile_image_url")
     public String profileImageUrl;
+    private String tagline;
+    private int followersCount;
+    private int followingsCount;
 
     public String getName() {
         return name;
@@ -38,6 +41,18 @@ public class User extends Model {
         return profileImageUrl;
     }
 
+    public String getTagline() {
+        return tagline;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFriendsCount() {
+        return followingsCount;
+    }
+
     public User() {
         super();
     }
@@ -51,6 +66,9 @@ public class User extends Model {
             u.remote_id = u.uid;
             u.screenName = json.getString("screen_name");
             u.profileImageUrl = json.getString("profile_image_url");
+            u.tagline = json.getString("description");
+            u.followersCount = json.getInt("followers_count");
+            u.followingsCount = json.getInt("friends_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }
