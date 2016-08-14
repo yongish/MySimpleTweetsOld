@@ -32,10 +32,8 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 public class HomeTimelineFragment extends TweetsListFragment {
-
     private long lowestUid;
     private RecyclerView rvTweets;
-
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
 
@@ -65,10 +63,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 populateTimeline();
             }
         });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
 
         return v;
     }
@@ -150,10 +144,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 User self = User.fromJSON(json);
 
-                addToFront(tweetBody, self);
-
-//                tweets.add(0, new Tweet(tweetBody, self));    // Add to front of list.
-//                aTweets.notifyDataSetChanged();
+                tweets.add(0, new Tweet(tweetBody, self));    // Add to front of list.
+                aTweets.notifyDataSetChanged();
             }
 
             @Override

@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -55,12 +56,9 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 populateTimeline();
             }
         });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
 
-        return v;    }
+        return v;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,13 +82,8 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 // DESERIALIZE JSON
                 // CREATE MODELS AND ADD THEM TO THE ADAPTER
                 // LOAD THE MODEL DATA INTO LISTVIEW
-                //aTweets.addAll(Tweet.fromJSONArray(json));
-
 //                aTweets.clear();
                 ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
-//                lowestUid = getLowestUid(newTweets);
-//                tweets.addAll(newTweets);
-//                aTweets.addAll(newTweets);
                 addAll(newTweets);
 //                aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
                 setSwipeContainerRefreshingFalse();
@@ -103,5 +96,11 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 if (errorResponse != null) errString = errorResponse.toString();
             }
         });
+    }
+
+    public void addAll(List<Tweet> tweets) {
+        this.tweets.addAll(tweets);
+        aTweets.addAll(tweets);
+        aTweets.notifyDataSetChanged();
     }
 }

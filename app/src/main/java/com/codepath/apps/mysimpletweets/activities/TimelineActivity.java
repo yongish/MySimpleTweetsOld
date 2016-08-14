@@ -25,10 +25,6 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-//        if (savedInstanceState == null) {
-//            fragment = (HomeTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-//        }
-
         // Get the viewpager
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
         // Set the viewpager adapter for the pager
@@ -44,8 +40,6 @@ public class TimelineActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.compose, menu);
         return true;
     }
-
-
 
     private final int REQUEST_CODE = 20;
     public void onComposeAction(MenuItem mi) {

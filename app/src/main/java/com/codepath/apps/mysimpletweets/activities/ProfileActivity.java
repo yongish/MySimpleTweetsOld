@@ -52,14 +52,14 @@ public class ProfileActivity extends AppCompatActivity {
             });
         }
 
-//        if (savedInstanceState == null) {
+        if (savedInstanceState == null) {
             // Create the user timeline fragement
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
             // Display user fragment within this activity (dynamically)
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContainer, fragmentUserTimeline);
             ft.commit();    // changes the fragments
-//        }
+        }
     }
 
     private void populateProfileHeader(User user) {
