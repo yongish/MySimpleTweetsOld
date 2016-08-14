@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
@@ -20,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TweetsListFragment extends Fragment {
-
+    protected TwitterClient client;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
-    private RecyclerView rvTweets;
-    private SwipeRefreshLayout swipeContainer;
+    protected RecyclerView rvTweets;
+    protected SwipeRefreshLayout swipeContainer;
 
     private HomeTimelineFragment activityTimeline;
 

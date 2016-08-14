@@ -15,7 +15,6 @@ import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
-import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -32,10 +31,10 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 public class HomeTimelineFragment extends TweetsListFragment {
-    private TwitterClient client;
+
     private long lowestUid;
     private RecyclerView rvTweets;
-    private SwipeRefreshLayout swipeContainer;
+
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
 
@@ -111,8 +110,9 @@ public class HomeTimelineFragment extends TweetsListFragment {
 //                aTweets.clear();
                 ArrayList<Tweet> newTweets = Tweet.fromJSONArray(json);
 //                lowestUid = getLowestUid(newTweets);
-//                tweets.addAll(newTweets);
-                addAll(newTweets);
+                tweets.addAll(newTweets);
+                aTweets.addAll(newTweets);
+//                addAll(newTweets);
 //                aTweets.notifyDataSetChanged(); // TODO: Find out how many tweets are fetched. Avoid using notifyDataSetChanged().
                 setSwipeContainerRefreshingFalse();
 
@@ -172,10 +172,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
         this.tweets.addAll(tweets);
         aTweets.addAll(tweets);
         aTweets.notifyDataSetChanged();
-    }
-
-    public void setSwipeContainerRefreshingFalse() {
-        swipeContainer.setRefreshing(false);
     }
 
     protected long getLowestUid() {
