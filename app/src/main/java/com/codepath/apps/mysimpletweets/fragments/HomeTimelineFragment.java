@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.models.Media;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -15,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -28,13 +32,13 @@ public class HomeTimelineFragment extends TweetsListFragment {
         lowestUid = Long.MAX_VALUE;
         client = TwitterApplication.getRestClient();    // singleton client
 
-/*        Configuration.Builder config = new Configuration.Builder(getActivity());
+        Configuration.Builder config = new Configuration.Builder(getActivity());
         config.addModelClasses(Tweet.class, User.class, Media.class);
         ActiveAndroid.initialize(getActivity());
 
         // Query ActiveAndroid for list of data and load result back to adapter user addAll
         List<Tweet> queryResults = new Select().from(Tweet.class).orderBy("created_at DESC").limit(100).execute();
-        addAll(queryResults);*/
+        addAll(queryResults);
 
         populateTimeline();
     }

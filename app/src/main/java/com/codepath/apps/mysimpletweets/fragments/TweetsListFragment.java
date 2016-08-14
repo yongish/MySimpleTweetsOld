@@ -36,7 +36,7 @@ public class TweetsListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tweets_list, container, false);
 
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweets);
-        aTweets = new TweetsArrayAdapter(getActivity(), tweets);
+
         rvTweets.setAdapter(aTweets);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvTweets.setLayoutManager(linearLayoutManager);
@@ -72,7 +72,7 @@ public class TweetsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         tweets = new ArrayList<>();
-
+        aTweets = new TweetsArrayAdapter(getActivity(), tweets);
 //        aTweets.notifyDataSetChanged();
 //        if (savedInstanceState == null) {
 //            activityTimeline = (HomeTimelineFragment) getFragmentManager().findFragmentById(R.id.fragment_timeline);
