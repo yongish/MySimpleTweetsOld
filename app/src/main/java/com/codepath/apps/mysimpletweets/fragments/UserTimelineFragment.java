@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
@@ -31,11 +32,13 @@ public class UserTimelineFragment extends TweetsListFragment {
     private RecyclerView rvTweets;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
+    private ProgressBar pb;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tweets_list, container, false);
+        pb = (ProgressBar) v.findViewById(R.id.pbLoading);
 
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweets);
 
@@ -47,7 +50,9 @@ public class UserTimelineFragment extends TweetsListFragment {
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
+                pb.setVisibility(ProgressBar.VISIBLE);
                 populateTimeline();
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
         });
 
@@ -58,6 +63,7 @@ public class UserTimelineFragment extends TweetsListFragment {
                 populateTimeline();
             }
         });
+
 
         return v;
     }

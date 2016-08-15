@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,14 +26,18 @@ public class ComposeActivity extends AppCompatActivity {
 
     private TwitterClient client;
     public User self;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
         client = TwitterApplication.getRestClient();
         if (TwitterClient.isOnline()) {
+            pb.setVisibility(ProgressBar.VISIBLE);
             getOwnUserDetails();
+            pb.setVisibility(ProgressBar.INVISIBLE);
         } else {
             Toast.makeText(this, "Check Internet Connection", Toast.LENGTH_LONG).show();
         }
@@ -42,6 +47,7 @@ public class ComposeActivity extends AppCompatActivity {
             TextView etTweet = (TextView) findViewById(R.id.etTweet);
             etTweet.append("@" + replyTo + " ");
         }
+
     }
 
     public void getOwnUserDetails() {
@@ -63,27 +69,24 @@ public class ComposeActivity extends AppCompatActivity {
 
     String status;
     public void postTweet(View v) {
-       status = ((EditText)findViewById(R.id.etTweet)).getText().toString();
+        status = ((EditText)findViewById(R.id.etTweet)).getText().toString();
+        pb.setVisibility(ProgressBar.VISIBLE);
 
         if (TwitterClient.isOnline()) {
             client.postTweet(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                    pb.setVisibility(ProgressBar.INVISIBLE);
                     Log.d("DEBUG", json.toString());
                     Intent tweet = new Intent();
                     tweet.putExtra("tweetBody", status);
                     setResult(RESULT_OK, tweet);
                     finish();
-//               Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_LONG).show();
-                    // JSON HERE
-                    // DESERIALIZE JSON
-                    // CREATE MODELS AND ADD THEM TO THE ADAPTER
-                    // LOAD THE MODEL DATA INTO LISTVIEW
-                    //aTweets.addAll(Tweet.fromJSONArray(json));
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    pb.setVisibility(ProgressBar.INVISIBLE);
                     Log.d("FAILED TO POST TWEET", errorResponse.toString());
 //               Toast.makeText(getBaseContext(), errorResponse.toString(), Toast.LENGTH_LONG).show();
                 }

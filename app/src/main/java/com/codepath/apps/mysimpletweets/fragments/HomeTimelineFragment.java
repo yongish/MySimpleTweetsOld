@@ -86,6 +86,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
         addAll(queryResults);
 
         populateTimeline();
+
+
     }
 
     // Send an API request to get the timeline json

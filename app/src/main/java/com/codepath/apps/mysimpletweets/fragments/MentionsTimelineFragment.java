@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
@@ -31,12 +32,14 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     private RecyclerView rvTweets;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
+    private ProgressBar pb;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tweets_list, container, false);
 
+        pb = (ProgressBar) v.findViewById(R.id.pbLoading);
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweets);
 
         rvTweets.setAdapter(aTweets);
@@ -59,6 +62,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
             }
         });
 
+
         return v;
     }
 
@@ -80,9 +84,11 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     // Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from the json
     public void populateTimeline() {
+        if (pb != null) pb.setVisibility(ProgressBar.VISIBLE);
         client.getMentionsTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                pb.setVisibility(ProgressBar.INVISIBLE);
                 Log.d("DEBUG", json.toString());
                 // JSON HERE
                 // DESERIALIZE JSON
@@ -98,6 +104,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                pb.setVisibility(ProgressBar.INVISIBLE);
                 String errString = "";
                 if (errorResponse != null) errString = errorResponse.toString();
             }

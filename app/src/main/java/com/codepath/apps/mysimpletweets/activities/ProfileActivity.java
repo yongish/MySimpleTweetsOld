@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import cz.msebera.android.httpclient.Header;
 public class ProfileActivity extends AppCompatActivity {
     TwitterClient client;
     User user;
+    private ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +33,18 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         client = TwitterApplication.getRestClient();
 
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+
         // Get the screen name
         String screenName = getIntent().getStringExtra("screen_name");
         if (TwitterClient.isOnline()) {
             if (screenName == null) {
+                pb.setVisibility(ProgressBar.VISIBLE);
                 // Get the account info
                 client.getUserInfo(new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        pb.setVisibility(ProgressBar.INVISIBLE);
                         user = User.fromJSON(response);
                         // My current user account's info
                         getSupportActionBar().setTitle("@" + user.getScreenName());
@@ -49,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
                 client.getUsersShow(screenName, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        pb.setVisibility(ProgressBar.INVISIBLE);
                         user = User.fromJSON(response);
                         getSupportActionBar().setTitle("@" + user.getScreenName());
                         populateProfileHeader(user);
